@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.1.0",
+    "@metamorph/trpc-panel": "^1.0.5",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@radix-ui/react-radio-group": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@t3-oss/env-nextjs": "^0.10.1",
@@ -23,6 +25,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.30.10",
@@ -41,6 +44,7 @@
     "zod": "^3.23.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
