@@ -25,8 +25,13 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#CC007D",
+          100: "#FFB4D3",
+          200: "#FF8CD9",
+          300: "#FB43BD",
+          400: "#EE1192",
+          500: "#CC007D",
+          foreground: "#FFFEFE",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -67,10 +72,16 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "vibrate": {
+          "0%": { transform: "translateX(0)" },
+          "25%, 75%": { transform: "translateX(-2px)" },
+          "50%, 100%": { transform: "translateX(2px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "vibrate": "vibrate 0.2s ease-out 1",
       },
       fontFamily: {
         rem: "var(--font-rem)",
