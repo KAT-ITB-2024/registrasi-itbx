@@ -12,39 +12,31 @@ import {
 import { z } from "zod";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "~/components/ui/button";
-import { type CategorySchema } from "./RegistrationForm";
-
+import { formSchema } from "./RegistrationForm";
 
 const CategoryForm = ({
   form,
   handleNext,
 }: {
-  form: UseFormReturn<z.infer<typeof CategorySchema>>;
+  form: UseFormReturn<z.infer<typeof formSchema>>;
   handleNext: () => void;
 }) => {
-
-  function onSubmit(data: z.infer<typeof CategorySchema>) {
-    console.log(data);
-    handleNext();
-  }
-
   return (
     <div className="w-full">
       <h1 className="text-center font-mogula text-[48px] text-primary">
         ITB GOT TALENT
       </h1>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-4"
-        >
+        <form onSubmit={handleNext} className="flex flex-col space-y-4">
           <FormField
             control={form.control}
             name="instance"
             render={({ field }) => (
               <FormItem className="flex flex-col space-y-0">
-                <div className="flex justify-between items-center">
-                  <FormLabel className="text-[18px] text-primary-500 font-medium">Instansi*</FormLabel>
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-[18px] font-medium text-primary-500">
+                    Instansi*
+                  </FormLabel>
                   <FormControl className="flex items-center">
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -55,7 +47,9 @@ const CategoryForm = ({
                         <FormControl>
                           <RadioGroupItem value="lembaga" />
                         </FormControl>
-                        <FormLabel className={`font-normal text-[14px] text-neutral-400 ${field.value === "lembaga" && "text-primary-400"}`} >
+                        <FormLabel
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "lembaga" && "text-primary-400"}`}
+                        >
                           Lembaga
                         </FormLabel>
                       </FormItem>
@@ -63,14 +57,16 @@ const CategoryForm = ({
                         <FormControl>
                           <RadioGroupItem value="non-lembaga" />
                         </FormControl>
-                        <FormLabel className={`font-normal text-[14px] text-neutral-400 ${field.value === "non-lembaga" && "text-primary-400"}`}>
+                        <FormLabel
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "non-lembaga" && "text-primary-400"}`}
+                        >
                           Non-Lembaga
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <FormMessage className="self-end"/>
+                <FormMessage className="self-end" />
               </FormItem>
             )}
           />
@@ -79,8 +75,10 @@ const CategoryForm = ({
             name="category"
             render={({ field }) => (
               <FormItem className="flex flex-col space-y-0">
-                <div className="flex justify-between items-center">
-                  <FormLabel className="text-[18px] text-primary-500 font-medium">Kategori*</FormLabel>
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-[18px] font-medium text-primary-500">
+                    Kategori*
+                  </FormLabel>
                   <FormControl className="flex items-center">
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -91,7 +89,9 @@ const CategoryForm = ({
                         <FormControl>
                           <RadioGroupItem value="individu" />
                         </FormControl>
-                        <FormLabel className={`font-normal text-[14px] text-neutral-400 ${field.value === "individu" && "text-primary-400"}`} >
+                        <FormLabel
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "individu" && "text-primary-400"}`}
+                        >
                           Individu
                         </FormLabel>
                       </FormItem>
@@ -99,18 +99,22 @@ const CategoryForm = ({
                         <FormControl>
                           <RadioGroupItem value="kelompok" />
                         </FormControl>
-                        <FormLabel className={`font-normal text-[14px] text-neutral-400 ${field.value === "kelompok" && "text-primary-400"}`}>
+                        <FormLabel
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "kelompok" && "text-primary-400"}`}
+                        >
                           Kelompok
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <FormMessage className="self-end"/>
+                <FormMessage className="self-end" />
               </FormItem>
             )}
           />
-          <Button type="submit" className="self-end">Selanjutnya</Button>
+          <Button type="submit" className="self-end">
+            Selanjutnya
+          </Button>
         </form>
       </Form>
     </div>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -14,64 +13,22 @@ import {
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
+import { formSchema } from "./RegistrationForm";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { FaInfoCircle } from "react-icons/fa";
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
-
-const memberSchema = z.object({
-  name: z.string().min(1, "Nama harus diisi"),
-  nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
-  programStudi: z.string().min(1, "Program Studi harus diisi"),
-});
-
-const formSchema = z.object({
-  name: z.string().min(1, "Nama harus diisi"),
-  nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
-  programStudi: z.string().min(1, "Program Studi harus diisi"),
-  lineId: z.string().min(1, "ID Line harus diisi"),
-  phoneNumber: z.string().min(1, "Nomor Telepon harus diisi"),
-  instagram: z.string().min(1, "Username Instagram harus diisi"),
-  members: z.array(memberSchema),
-  ktm: z
-    .instanceof(FileList)
-    .refine((file: FileList) => {
-      return !file || file.length > 0;
-    }, "KTM harus diisi")
-    .refine((file: FileList) => {
-      return file[0] && file[0].size <= MAX_UPLOAD_SIZE;
-    }, "KTM harus berukuran kurang dari 5MB")
-    .refine((file: FileList) => {
-      return ACCEPTED_FILE_TYPES.includes(file[0]?.type ?? "");
-    }, "KTM harus berupa file ZIP"),
-  description: z.string().min(1, "Deskripsi Performance harus diisi"),
-  videoLink: z.string().url("Harus berupa URL yang valid"),
-});
-
-// type MemberType = z.infer<typeof formSchema>["members"][0];
-
-const ProfileForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "Kevin Sebastian",
-      nim: "18221143",
-      programStudi: "Teknik Informatika",
-      lineId: "kevin.sst",
-      phoneNumber: "085236961165",
-      instagram: "Halo",
-      members: [
-        {
-          name: "Abdul Aziz",
-          nim: "18221143",
-          programStudi: "Teknik Informatika",
-        },
-      ],
-      ktm: undefined,
-      description: "adwdawd",
-      videoLink: "https://stackoverflow.com/questions/23914273/getting-the-file-type-of-a-zip-file-in-input-file",
-    },
-  });
-
+const ProfileForm = ({
+  form,
+  onSubmit,
+}: {
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+  onSubmit: (values: z.infer<typeof formSchema>) => void;
+}) => {
   const fileRef = form.register("ktm");
 
   const { fields, append, remove } = useFieldArray({
@@ -79,15 +36,12 @@ const ProfileForm = () => {
     control: form.control,
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("DIUAHIDHAID");
-    console.log(values);
-  };
+  const isGroup = form.watch("category") === "kelompok";
 
   return (
     <div className="h-fit w-full">
       <h1 className="mb-5 text-center font-mogula text-[48px] text-primary-500">
-        Pendaftaran Individu
+        Pendaftaran {isGroup ? "Kelompok" : "Individu"}
       </h1>
       <Form {...form}>
         <form
@@ -103,7 +57,7 @@ const ProfileForm = () => {
                   htmlFor="name"
                   className="text-[16px] font-medium text-primary-500"
                 >
-                  Nama Lengkap *
+                  Nama Lengkap {isGroup && "Perwakilan Tim"} *
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -125,7 +79,7 @@ const ProfileForm = () => {
                   htmlFor="nim"
                   className="text-[16px] font-medium text-primary-500"
                 >
-                  NIM
+                  NIM {isGroup && "Perwakilan Tim"} *
                 </FormLabel>
                 <FormControl>
                   <Input {...field} id="nim" placeholder="Masukkan NIM Prodi" />
@@ -143,7 +97,7 @@ const ProfileForm = () => {
                   htmlFor="programStudi"
                   className="text-[16px] font-medium text-primary-500"
                 >
-                  Program Studi *
+                  Program Studi {isGroup && "Perwakilan Tim"}*
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -165,7 +119,7 @@ const ProfileForm = () => {
                   htmlFor="phoneNumber"
                   className="text-[16px] font-medium text-primary-500"
                 >
-                  Nomor Telepon *
+                  Nomor Telepon {isGroup && "Perwakilan Tim"} *
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -187,7 +141,7 @@ const ProfileForm = () => {
                   htmlFor="instagram"
                   className="text-[16px] font-medium text-primary-500"
                 >
-                  Username Instagram *
+                  Username Instagram {isGroup && "Perwakilan Tim"} *
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -200,85 +154,112 @@ const ProfileForm = () => {
               </FormItem>
             )}
           />
-          {fields.map((field, index) => {
-            return (
-              <div key={field.id}>
-                <div className="flex w-full items-center justify-between mb-2">
-                  <h1 className="text-[16px] font-medium text-primary-500">
-                    Data Anggota Tim {index + 2} *
-                  </h1>
-                  {index > 0 && <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="aspect-square w-6 rounded-sm border-2 border-primary-500 font-bold leading-none text-primary-500"
-                  >
-                    -
-                  </button>}
-                </div>
-                <div className="space-y-2">
-                  <FormField
-                    control={form.control}
-                    name={`members.${index}.name` as const}
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormControl>
-                          <Input {...field} placeholder={`Masukkan Nama Anggota Tim ${index + 2}`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`members.${index}.nim` as const}
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormControl>
-                          <Input {...field} placeholder={`Masukkan NIM Anggota Tim ${index + 2}`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`members.${index}.programStudi` as const}
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormControl>
-                          <Input {...field} placeholder={`Masukkan Prodi Anggota Tim ${index + 2}`} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            );
-          })}
-          <Button
-            type="button"
-            onClick={() =>
-              append({
-                name: "",
-                nim: "",
-                programStudi: "",
-              })
-            }
-          >
-            Tambah Anggota
-          </Button>
+          {isGroup && (
+            <>
+              {fields.map((field, index) => {
+                return (
+                  <div key={field.id}>
+                    <div className="mb-2 flex w-full items-center justify-between">
+                      <h1 className="text-[16px] font-medium text-primary-500">
+                        Data Anggota Tim {index + 2} *
+                      </h1>
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="aspect-square w-6 rounded-sm border-2 border-primary-500 font-bold leading-none text-primary-500"
+                        >
+                          -
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <FormField
+                        control={form.control}
+                        name={`members.${index}.name` as const}
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={`Masukkan Nama Anggota Tim ${index + 2}`}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`members.${index}.nim` as const}
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={`Masukkan NIM Anggota Tim ${index + 2}`}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`members.${index}.programStudi` as const}
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder={`Masukkan Prodi Anggota Tim ${index + 2}`}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <Button
+                type="button"
+                onClick={() =>
+                  append({
+                    name: "",
+                    nim: "",
+                    programStudi: "",
+                  })
+                }
+              >
+                Tambah Anggota
+              </Button>
+            </>
+          )}
           <FormField
             control={form.control}
             name="ktm"
             render={() => (
               <FormItem className="space-y-1">
-                <FormLabel
-                  htmlFor="ktm"
-                  className="text-[16px] font-medium text-primary-500"
-                >
-                  KTM *
-                </FormLabel>
+                <div className="flex items-center gap-3">
+                  <FormLabel
+                    htmlFor="ktm"
+                    className="text-[16px] font-medium text-primary-500"
+                  >
+                    KTM {isGroup && "Seluruh Anggota Tim"} *
+                  </FormLabel>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <FaInfoCircle className="text-primary-500" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>Compress dalam bentuk .zip</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <FormControl>
                   <Input {...fileRef} id="ktm" type="file" />
                 </FormControl>

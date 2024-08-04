@@ -3,36 +3,92 @@
 import { useState } from "react";
 import CategoryForm from "./CategoryForm";
 import ProfileForm from "./ProfileForm";
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export const CategorySchema = z.object({
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
+const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
+
+const memberSchema = z.object({
+  name: z.string().min(1, "Nama harus diisi"),
+  nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
+  programStudi: z.string().min(1, "Program Studi harus diisi"),
+});
+
+export const formSchema = z.object({
   instance: z.enum(["lembaga", "non-lembaga"], {
     required_error: "Instansi harus diisi",
   }),
   category: z.enum(["individu", "kelompok"], {
     required_error: "Kategori harus diisi",
   }),
+  name: z.string().min(1, "Nama harus diisi"),
+  nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
+  programStudi: z.string().min(1, "Program Studi harus diisi"),
+  lineId: z.string().min(1, "ID Line harus diisi"),
+  phoneNumber: z.string().min(1, "Nomor Telepon harus diisi"),
+  instagram: z.string().min(1, "Username Instagram harus diisi"),
+  members: z.array(memberSchema),
+  ktm: z
+    .unknown()
+    .transform((value) => {
+      return value as FileList;
+    })
+    .refine((file: FileList) => {
+      return !file || file.length > 0;
+    }, "KTM harus diisi")
+    .refine((file: FileList) => {
+      return file[0] && file[0].size <= MAX_UPLOAD_SIZE;
+    }, "KTM harus berukuran kurang dari 5MB")
+    .refine((file: FileList) => {
+      return ACCEPTED_FILE_TYPES.includes(file[0]?.type ?? "");
+    }, "KTM harus berupa file ZIP"),
+  description: z.string().min(1, "Deskripsi Performance harus diisi"),
+  videoLink: z.string().url("Harus berupa URL yang valid"),
 });
 
 const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
-  const form = useForm<z.infer<typeof CategorySchema>>({
-    resolver: zodResolver(CategorySchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      instance: undefined,
+      category: undefined,
+      name: "Kevin Sebastian",
+      nim: "18221143",
+      programStudi: "Teknik Informatika",
+      lineId: "kevin.sst",
+      phoneNumber: "085236961165",
+      instagram: "Halo",
+      members: [
+        {
+          name: "Abdul Aziz",
+          nim: "18221143",
+          programStudi: "Teknik Informatika",
+        },
+      ],
+      ktm: undefined,
+      description: "adwdawd",
+      videoLink:
+        "https://stackoverflow.com/questions/23914273/getting-the-file-type-of-a-zip-file-in-input-file",
+    },
   });
 
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
+
   return (
-    <div className="w-full max-w-xl z-10 h-screen md:py-12 flex items-center">
-      <div className={`w-full h-fit max-h-full overflow-y-auto px-10 py-10 flex justify-center rounded-2xl ${styles.glassmorphism}`}>
+    <div className="z-10 flex h-screen w-full max-w-xl items-center md:py-12">
+      <div
+        className={`flex h-fit max-h-full w-full justify-center overflow-y-auto rounded-2xl px-10 py-10 ${styles.glassmorphism}`}
+      >
         {!isProfileForm && (
-          <CategoryForm 
-            form={form}
-            handleNext={() => setIsProfileForm(true)}
-          />
+          <CategoryForm form={form} handleNext={() => setIsProfileForm(true)} />
         )}
-        {isProfileForm && <ProfileForm />}
+        {isProfileForm && <ProfileForm form={form} onSubmit={onSubmit} />}
       </div>
     </div>
   );
