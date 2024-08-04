@@ -1,12 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
+
 import CategoryForm from "./CategoryForm";
 import ProfileForm from "./ProfileForm";
 import styles from "./styles.module.css";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import AlertModal from "~/components/AlertModal";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -51,6 +66,8 @@ export const formSchema = z.object({
 
 const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,8 +94,11 @@ const RegistrationForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("AWIODHAWIUD");
     console.log(values);
   };
+
+  const handleSubmit = form.handleSubmit(onSubmit);
 
   return (
     <div className="z-10 flex h-screen w-full max-w-xl items-center md:py-12">
@@ -88,8 +108,16 @@ const RegistrationForm = () => {
         {!isProfileForm && (
           <CategoryForm form={form} handleNext={() => setIsProfileForm(true)} />
         )}
-        {isProfileForm && <ProfileForm form={form} onSubmit={onSubmit} />}
+        {isProfileForm && (
+          <ProfileForm form={form} onSubmit={() => setIsAlertOpen(true)} />
+        )}
       </div>
+      <AlertModal
+        open={isAlertOpen}
+        setOpen={setIsAlertOpen}
+        handleAction={() => handleSubmit}
+        description="Anda berhasil mendaftar"
+      />
     </div>
   );
 };
