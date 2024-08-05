@@ -17,7 +17,7 @@ import {
 export const createTable = pgTableCreator((name) => `${name}`);
 
 export const itbGotTalentInstanceEnum = pgEnum("itbGotTalentInstance", [
-  "Lembaga",
+  "UKM",
   "Non-Lembaga",
 ]);
 export const itbGotTalentCategoryEnum = pgEnum("itbGotTalentCategory", [
@@ -36,6 +36,7 @@ export const itbGotTalentRegistrants = createTable("itbGotTalentRegistrants", {
   lineId: varchar("lineId", { length: 255 }).notNull(),
   phoneNumber: varchar("phoneNumber", { length: 20 }).notNull(),
   instagram: varchar("instagram", { length: 255 }).notNull(),
+  groupName: varchar("groupName", { length: 255 }),
   members: varchar("members", { length: 255 })
     .array()
     .default(sql`ARRAY[]::varchar[]`),
