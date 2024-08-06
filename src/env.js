@@ -22,11 +22,6 @@ export const env = createEnv({
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
-    DO_ACCESS_KEY: z.string().optional(),
-    DO_SECRET_KEY: z.string().optional(),
-    DO_ORIGIN_ENDPOINT: z.string().optional(),
-    DO_BUCKET_NAME: z.string().optional(),
-    DO_REGION: z.string().optional(),
   },
 
   /**
@@ -36,6 +31,11 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_DO_ACCESS_KEY: z.string().optional(),
+    NEXT_PUBLIC_DO_SECRET_KEY: z.string().optional(),
+    NEXT_PUBLIC_DO_ORIGIN_ENDPOINT: z.string().optional(),
+    NEXT_PUBLIC_DO_BUCKET_NAME: z.string().optional(),
+    NEXT_PUBLIC_DO_REGION: z.string().optional(),
   },
 
   /**
@@ -47,11 +47,11 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    DO_ACCESS_KEY: process.env.DO_ACCESS_KEY,
-    DO_SECRET_KEY: process.env.DO_SECRET_KEY,
-    DO_ORIGIN_ENDPOINT: process.env.DO_ORIGIN_ENDPOINT,
-    DO_BUCKET_NAME: process.env.DO_BUCKET_NAME,
-    DO_REGION: process.env.DO_REGION,
+    NEXT_PUBLIC_DO_ACCESS_KEY: process.env.NEXT_PUBLIC_DO_ACCESS_KEY,
+    NEXT_PUBLIC_DO_SECRET_KEY: process.env.NEXT_PUBLIC_DO_SECRET_KEY,
+    NEXT_PUBLIC_DO_ORIGIN_ENDPOINT: process.env.NEXT_PUBLIC_DO_ORIGIN_ENDPOINT,
+    NEXT_PUBLIC_DO_BUCKET_NAME: process.env.NEXT_PUBLIC_DO_BUCKET_NAME,
+    NEXT_PUBLIC_DO_REGION: process.env.NEXT_PUBLIC_DO_REGION,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

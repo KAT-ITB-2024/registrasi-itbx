@@ -18,7 +18,7 @@ export const StorageRouter = createTRPCRouter({
         const fileUrl = await getSignedUrl(
           s3Client,
           new GetObjectCommand({
-            Bucket: env.DO_BUCKET_NAME,
+            Bucket: env.NEXT_PUBLIC_DO_BUCKET_NAME,
             Key: input.folder + "/" + input.fileName,
           }),
           { expiresIn: 3600 * 24 * 7 },
