@@ -10,6 +10,7 @@ import CategoryForm from "./CategoryForm";
 import ProfileForm from "./ProfileForm";
 import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
+import { api } from "~/trpc/react";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -21,6 +22,7 @@ const memberSchema = z.object({
 });
 
 export const formSchema = z.object({
+  groupName: z.string().min(1, "Nama Kelompok harus diisi"),
   name: z.string().min(1, "Nama harus diisi"),
   nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
   programStudi: z.string().min(1, "Program Studi harus diisi"),
@@ -47,10 +49,10 @@ export const formSchema = z.object({
 });
 
 export const categorySchema = z.object({
-  instance: z.enum(["lembaga", "non-lembaga"], {
+  instance: z.enum(["UKM", "Non-Lembaga"], {
     required_error: "Instansi harus diisi",
   }),
-  category: z.enum(["individu", "kelompok"], {
+  category: z.enum(["Individu", "Kelompok"], {
     required_error: "Kategori harus diisi",
   }),
 });
@@ -63,9 +65,12 @@ const RegistrationForm = () => {
     resolver: zodResolver(categorySchema),
   });
 
+  const submitMutation = api.itbGotTalent.create.useMutation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      groupName: "",
       name: "Kevin Sebastian",
       nim: "18221143",
       programStudi: "Teknik Informatika",
@@ -86,14 +91,39 @@ const RegistrationForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("AWIODHAWIUD");
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const members = values.members.map(
+      (member) => `${member.name}-${member.nim}-${member.programStudi}`,
+    );
+    const res = await submitMutation.mutateAsync({
+      instance: categoryForm.getValues("instance"),
+      category: categoryForm.getValues("category"),
+      groupName: values.groupName,
+      name: values.name,
+      nim: values.nim,
+      programStudi: values.programStudi,
+      lineId: values.lineId,
+      phoneNumber: values.phoneNumber,
+      instagram: values.instagram,
+      members: members,
+      ktmPath: "belomada",
+      description: values.description,
+      videoLink: values.videoLink,
+    });
+
+    console.log(res);
+  };
+
+  const handleNext = () => {
+    const groupName =
+      categoryForm.watch("category") === "Kelompok" ? "" : "Individu";
+    form.setValue("groupName", groupName);
+    setIsProfileForm(true);
   };
 
   const handleSubmit = form.handleSubmit(onSubmit);
 
-  const isGroup = categoryForm.watch("category") === "kelompok";
+  const isGroup = categoryForm.watch("category") === "Kelompok";
 
   return (
     <div className="z-10 flex h-screen w-full max-w-xl items-center md:py-12">
@@ -101,10 +131,7 @@ const RegistrationForm = () => {
         className={`flex h-fit max-h-full w-full justify-center overflow-y-auto rounded-2xl px-10 py-10 ${styles.glassmorphism}`}
       >
         {!isProfileForm && (
-          <CategoryForm
-            form={categoryForm}
-            handleNext={() => setIsProfileForm(true)}
-          />
+          <CategoryForm form={categoryForm} handleNext={handleNext} />
         )}
         {isProfileForm && (
           <ProfileForm
@@ -114,13 +141,12 @@ const RegistrationForm = () => {
             onSubmit={() => setIsAlertOpen(true)}
           />
         )}
-        <AlertModal
-          open={isAlertOpen}
-          setOpen={setIsAlertOpen}
-          handleAction={() => handleSubmit}
-          description="Anda berhasil mendaftar"
-        />
       </div>
+      <AlertModal
+        open={isAlertOpen}
+        setOpen={setIsAlertOpen}
+        handleAction={handleSubmit}
+      />
     </div>
   );
 };

@@ -49,20 +49,20 @@ const CategoryForm = ({
                     >
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="lembaga" />
+                          <RadioGroupItem value="UKM" />
                         </FormControl>
                         <FormLabel
-                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "lembaga" && "text-primary-400"}`}
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "UKM" && "text-primary-400"}`}
                         >
                           UKM
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="non-lembaga" />
+                          <RadioGroupItem value="Non-Lembaga" />
                         </FormControl>
                         <FormLabel
-                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "non-lembaga" && "text-primary-400"}`}
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "Non-Lembaga" && "text-primary-400"}`}
                         >
                           Nonlembaga
                         </FormLabel>
@@ -91,20 +91,20 @@ const CategoryForm = ({
                     >
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="individu" />
+                          <RadioGroupItem value="Individu" />
                         </FormControl>
                         <FormLabel
-                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "individu" && "text-primary-400"}`}
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "Individu" && "text-primary-400"}`}
                         >
                           Individu
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="kelompok" />
+                          <RadioGroupItem value="Kelompok" />
                         </FormControl>
                         <FormLabel
-                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "kelompok" && "text-primary-400"}`}
+                          className={`text-[14px] font-normal text-neutral-400 ${field.value === "Kelompok" && "text-primary-400"}`}
                         >
                           Kelompok
                         </FormLabel>
@@ -119,13 +119,13 @@ const CategoryForm = ({
           <div
             className={`w-full origin-top scale-y-0 rounded-lg bg-pink-200 px-3 py-2 text-[14px] text-primary transition-all duration-500 ${instance && "scale-y-100"}`}
           >
-            {instance === "lembaga" && (
+            {instance === "UKM" && (
               <p>
                 Pemenang kategori <b>UKM</b> akan mendapatkan kesempatan untuk
                 tampil di <b>ITB-X</b>
               </p>
             )}
-            {instance === "non-lembaga" && (
+            {instance === "Non-Lembaga" && (
               <p>
                 Pemenang kategori <b>Nonlembaga</b> akan mendapatkan kesempatan
                 untuk tampil di <b>OSKM</b>
