@@ -11,6 +11,7 @@ import ProfileForm from "./ProfileForm";
 import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
 import { api } from "~/trpc/react";
+import { uploadFile } from "~/lib/files";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -92,26 +93,38 @@ const RegistrationForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const members = values.members.map(
-      (member) => `${member.name}-${member.nim}-${member.programStudi}`,
-    );
-    const res = await submitMutation.mutateAsync({
-      instance: categoryForm.getValues("instance"),
-      category: categoryForm.getValues("category"),
-      groupName: values.groupName,
-      name: values.name,
-      nim: values.nim,
-      programStudi: values.programStudi,
-      lineId: values.lineId,
-      phoneNumber: values.phoneNumber,
-      instagram: values.instagram,
-      members: members,
-      ktmPath: "belomada",
-      description: values.description,
-      videoLink: values.videoLink,
-    });
+    try {
+      // Upload the KTM file
+      const ktmFile = values.ktm[0];
+      const fileName = `${values.nim}-${ktmFile?.name ?? ""}`;
+      const ktmPath = await uploadFile(ktmFile!, fileName);
 
-    console.log(res);
+      // Prepare the members data
+      const members = values.members.map(
+        (member) => `${member.name}-${member.nim}-${member.programStudi}`,
+      );
+
+      // Submit the form data along with the ktmPath
+      const res = await submitMutation.mutateAsync({
+        instance: categoryForm.getValues("instance"),
+        category: categoryForm.getValues("category"),
+        groupName: values.groupName,
+        name: values.name,
+        nim: values.nim,
+        programStudi: values.programStudi,
+        lineId: values.lineId,
+        phoneNumber: values.phoneNumber,
+        instagram: values.instagram,
+        members: members,
+        ktmPath: ktmPath, // Use the URL of the uploaded KTM file
+        description: values.description,
+        videoLink: values.videoLink,
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleNext = () => {
