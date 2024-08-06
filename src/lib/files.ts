@@ -1,51 +1,7 @@
-import { PutBucketCorsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { FolderEnum, s3Client } from "~/server/bucket";
 import { v4 as uuidv4 } from "uuid";
 import sanitize from "sanitize-filename";
-import { env } from "~/env";
-// import axios, { type AxiosProgressEvent } from "axios";
-
-// export enum FolderEnum {
-//   PROFILE = "profile",
-//   ASSIGNMENT = "assignment",
-//   MATERIAL = "material"
-// }
-
-// export enum AllowableFileTypeEnum {
-//   PDF = "application/pdf",
-//   PNG = "image/png",
-//   JPEG = "image/jpeg"
-// }
-
-// export const uploadFile = async (
-//   url: string,
-//   file: File,
-//   type: AllowableFileTypeEnum,
-//   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
-// ) => {
-//   const axiosInstance = axios.create();
-
-//   await axiosInstance.put<null>(url, file, {
-//     headers: {
-//       "Content-Type": type
-//     },
-//     onUploadProgress
-//   });
-// };
-
-// export const downloadFile = async (
-//   url: string,
-//   onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
-// ) => {
-//   const axiosInstance = axios.create();
-
-//   const response = await axiosInstance.get<Blob>(url, {
-//     responseType: "blob",
-//     onDownloadProgress
-//   });
-
-//   return response.data;
-// };
 
 const uploadFile = async (file: File, fileName: string, folder: FolderEnum) => {
   try {
@@ -62,7 +18,7 @@ const uploadFile = async (file: File, fileName: string, folder: FolderEnum) => {
     });
 
     // Upload the file
-    const response = await s3Client.send(putObjectCommand);
+    await s3Client.send(putObjectCommand);
 
     return sanitizedFilename;
   } catch (error) {

@@ -1,7 +1,10 @@
 import Image from "next/image";
 import RegistrationForm from "./components/RegistrationForm";
+import { redirect } from "next/navigation";
 
 const Page = () => {
+  const now = new Date();
+  if (now < new Date("2024-08-07")) redirect("/");
   return (
     <div className="relative flex h-screen w-full items-center justify-center bg-[url('/images/pink-background.png')] bg-cover bg-center bg-no-repeat">
       <Image
