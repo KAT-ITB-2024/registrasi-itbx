@@ -24,9 +24,13 @@ import { FaInfoCircle } from "react-icons/fa";
 
 const ProfileForm = ({
   form,
+  isGroup,
+  handleBack,
   onSubmit,
 }: {
   form: UseFormReturn<z.infer<typeof formSchema>>;
+  isGroup: boolean;
+  handleBack: () => void;
   onSubmit: () => void;
 }) => {
   const fileRef = form.register("ktm");
@@ -35,8 +39,6 @@ const ProfileForm = ({
     name: "members",
     control: form.control,
   });
-
-  const isGroup = form.watch("category") === "kelompok";
 
   return (
     <div className="h-fit w-full">
@@ -308,7 +310,7 @@ const ProfileForm = ({
           )}
         />
         <div className="flex w-full gap-3 py-3">
-          <Button className="flex-1" variant={"secondary"}>
+          <Button className="flex-1" variant={"secondary"} onClick={handleBack}>
             Kembali
           </Button>
           <Button className="flex-1" onClick={onSubmit}>

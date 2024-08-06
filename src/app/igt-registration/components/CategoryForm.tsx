@@ -12,22 +12,26 @@ import {
 import { z } from "zod";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "~/components/ui/button";
-import { formSchema } from "./RegistrationForm";
+import { categorySchema } from "./RegistrationForm";
 
 const CategoryForm = ({
   form,
   handleNext,
 }: {
-  form: UseFormReturn<z.infer<typeof formSchema>>;
+  form: UseFormReturn<z.infer<typeof categorySchema>>;
   handleNext: () => void;
 }) => {
+  const instance = form.watch("instance");
   return (
     <div className="w-full">
-      <h1 className="text-center font-mogula text-[48px] text-primary">
+      <h1 className="mb-5 text-center font-mogula text-[48px] text-primary">
         ITB GOT TALENT
       </h1>
       <Form {...form}>
-        <form onSubmit={handleNext} className="flex flex-col space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleNext)}
+          className="flex flex-col space-y-4"
+        >
           <FormField
             control={form.control}
             name="instance"
@@ -50,7 +54,7 @@ const CategoryForm = ({
                         <FormLabel
                           className={`text-[14px] font-normal text-neutral-400 ${field.value === "lembaga" && "text-primary-400"}`}
                         >
-                          Lembaga
+                          UKM
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2 space-y-0">
@@ -60,7 +64,7 @@ const CategoryForm = ({
                         <FormLabel
                           className={`text-[14px] font-normal text-neutral-400 ${field.value === "non-lembaga" && "text-primary-400"}`}
                         >
-                          Non-Lembaga
+                          Nonlembaga
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -112,6 +116,22 @@ const CategoryForm = ({
               </FormItem>
             )}
           />
+          <div
+            className={`w-full origin-top scale-y-0 rounded-lg bg-pink-200 px-3 py-2 text-[14px] text-primary transition-all duration-500 ${instance && "scale-y-100"}`}
+          >
+            {instance === "lembaga" && (
+              <p>
+                Pemenang kategori <b>UKM</b> akan mendapatkan kesempatan untuk
+                tampil di <b>ITB-X</b>
+              </p>
+            )}
+            {instance === "non-lembaga" && (
+              <p>
+                Pemenang kategori <b>Nonlembaga</b> akan mendapatkan kesempatan
+                untuk tampil di <b>OSKM</b>
+              </p>
+            )}
+          </div>
           <Button type="submit" className="self-end">
             Selanjutnya
           </Button>

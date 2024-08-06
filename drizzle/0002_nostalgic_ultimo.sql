@@ -1,0 +1,1 @@
+ALTER TABLE "itbGotTalentRegistrants" ALTER COLUMN "nim" SET DATA TYPE varchar(8);
