@@ -1,0 +1,136 @@
+{
+  "id": "0f8ddba1-48d8-498f-9616-fd664372e17d",
+  "prevId": "fdb198dc-5180-468a-80c0-cb94bd444653",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.itbGotTalentRegistrants": {
+      "name": "itbGotTalentRegistrants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "instance": {
+          "name": "instance",
+          "type": "itbGotTalentInstance",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "itbGotTalentCategory",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nim": {
+          "name": "nim",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "programStudi": {
+          "name": "programStudi",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lineId": {
+          "name": "lineId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phoneNumber": {
+          "name": "phoneNumber",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "instagram": {
+          "name": "instagram",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupName": {
+          "name": "groupName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "members": {
+          "name": "members",
+          "type": "varchar(255)[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "ARRAY[]::varchar[]"
+        },
+        "ktmPath": {
+          "name": "ktmPath",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "videoLink": {
+          "name": "videoLink",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.itbGotTalentCategory": {
+      "name": "itbGotTalentCategory",
+      "schema": "public",
+      "values": ["Individu", "Kelompok"]
+    },
+    "public.itbGotTalentInstance": {
+      "name": "itbGotTalentInstance",
+      "schema": "public",
+      "values": ["UKM", "Non-Lembaga"]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
