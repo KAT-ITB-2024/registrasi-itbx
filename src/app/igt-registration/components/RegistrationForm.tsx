@@ -78,17 +78,16 @@ const RegistrationForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       groupName: "",
-      name: "Kevin Sebastian",
-      nim: "18221143",
-      programStudi: "Teknik Informatika",
-      lineId: "kevin.sst",
-      phoneNumber: "085236961165",
-      instagram: "Halo",
+      name: "",
+      nim: "",
+      programStudi: "",
+      lineId: "",
+      phoneNumber: "",
+      instagram: "",
       members: [],
       ktm: undefined,
-      description: "adwdawd",
-      videoLink:
-        "https://stackoverflow.com/questions/23914273/getting-the-file-type-of-a-zip-file-in-input-file",
+      description: "",
+      videoLink: "",
     },
   });
 
