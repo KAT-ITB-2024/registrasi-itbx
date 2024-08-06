@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { mogula, rem } from "./fonts";
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "ITBX 2024",
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${rem.variable} ${mogula.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <Toaster />
+        </TRPCReactProvider>
       </body>
     </html>
   );

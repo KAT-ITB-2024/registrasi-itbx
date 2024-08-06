@@ -40,7 +40,7 @@ export const itbGotTalentRegistrants = createTable("itbGotTalentRegistrants", {
   members: varchar("members", { length: 255 })
     .array()
     .default(sql`ARRAY[]::varchar[]`),
-  ktmPath: varchar("ktmPath", { length: 255 }).notNull(),
+  ktmPath: varchar("ktmPath", { length: 1000 }).notNull(),
   description: text("description").notNull(),
   videoLink: varchar("videoLink", { length: 255 }).notNull(),
   createdAt: timestamp("createdAt", {

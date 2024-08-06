@@ -12,6 +12,9 @@ import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
 import { api } from "~/trpc/react";
 import { uploadFile } from "~/lib/files";
+import SuccessModal from "~/components/SuccessModal";
+import { toast } from "sonner";
+import { FolderEnum } from "~/server/bucket";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -61,12 +64,14 @@ export const categorySchema = z.object({
 const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const categoryForm = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
   });
 
   const submitMutation = api.itbGotTalent.create.useMutation();
+  const generateUrlForUpload = api.storage.genereateURLForUpload.useMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,13 +83,7 @@ const RegistrationForm = () => {
       lineId: "kevin.sst",
       phoneNumber: "085236961165",
       instagram: "Halo",
-      members: [
-        {
-          name: "Abdul Aziz",
-          nim: "18221143",
-          programStudi: "Teknik Informatika",
-        },
-      ],
+      members: [],
       ktm: undefined,
       description: "adwdawd",
       videoLink:
@@ -93,22 +92,34 @@ const RegistrationForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const members = values.members.map(
+      (member) => `${member.name}-${member.nim}-${member.programStudi}`,
+    );
+    const groupName =
+      categoryForm.getValues("category") === "Kelompok" ? values.groupName : "";
+    const toastId = toast("toast");
     try {
-      // Upload the KTM file
-      const ktmFile = values.ktm[0];
-      const fileName = `${values.nim}-${ktmFile?.name ?? ""}`;
-      const ktmPath = await uploadFile(ktmFile!, fileName);
+      toast.loading("Loading...", {
+        id: toastId,
+      });
 
-      // Prepare the members data
-      const members = values.members.map(
-        (member) => `${member.name}-${member.nim}-${member.programStudi}`,
+      const ktmFile = values.ktm[0];
+      const fileName = values.nim;
+      const ktmFilename = await uploadFile(
+        ktmFile!,
+        fileName,
+        FolderEnum.ITBGOTTALENT,
       );
 
-      // Submit the form data along with the ktmPath
-      const res = await submitMutation.mutateAsync({
+      const ktmPath = await generateUrlForUpload.mutateAsync({
+        folder: FolderEnum.ITBGOTTALENT,
+        fileName: ktmFilename,
+      });
+
+      await submitMutation.mutateAsync({
         instance: categoryForm.getValues("instance"),
         category: categoryForm.getValues("category"),
-        groupName: values.groupName,
+        groupName: groupName,
         name: values.name,
         nim: values.nim,
         programStudi: values.programStudi,
@@ -121,17 +132,33 @@ const RegistrationForm = () => {
         videoLink: values.videoLink,
       });
 
-      console.log(res);
+      toast.dismiss(toastId);
+      setIsSuccessModalOpen(true);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      toast.error("Gagal mendaftar, silahkan coba lagi", {
+        id: toastId,
+      });
+    } finally {
+      setIsAlertOpen(false);
     }
   };
 
   const handleNext = () => {
     const groupName =
       categoryForm.watch("category") === "Kelompok" ? "" : "Individu";
+    const newMember =
+      categoryForm.watch("category") === "Kelompok"
+        ? [{ name: "", nim: "", programStudi: "" }]
+        : [];
     form.setValue("groupName", groupName);
+    form.setValue("members", newMember);
     setIsProfileForm(true);
+  };
+
+  const handleReset = () => {
+    form.reset();
+    categoryForm.reset();
+    setIsProfileForm(false);
   };
 
   const handleSubmit = form.handleSubmit(onSubmit);
@@ -159,6 +186,11 @@ const RegistrationForm = () => {
         open={isAlertOpen}
         setOpen={setIsAlertOpen}
         handleAction={handleSubmit}
+      />
+      <SuccessModal
+        open={isSuccessModalOpen}
+        setOpen={setIsSuccessModalOpen}
+        onClose={() => handleReset()}
       />
     </div>
   );
