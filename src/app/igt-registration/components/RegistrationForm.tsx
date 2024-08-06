@@ -65,6 +65,7 @@ const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const categoryForm = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
@@ -99,6 +100,7 @@ const RegistrationForm = () => {
       categoryForm.getValues("category") === "Kelompok" ? values.groupName : "";
     const toastId = toast("toast");
     try {
+      setIsLoading(true);
       toast.loading("Loading...", {
         id: toastId,
       });
@@ -139,6 +141,7 @@ const RegistrationForm = () => {
         id: toastId,
       });
     } finally {
+      setIsLoading(false);
       setIsAlertOpen(false);
     }
   };
@@ -186,6 +189,7 @@ const RegistrationForm = () => {
         open={isAlertOpen}
         setOpen={setIsAlertOpen}
         handleAction={handleSubmit}
+        isLoading={isLoading}
       />
       <SuccessModal
         open={isSuccessModalOpen}
