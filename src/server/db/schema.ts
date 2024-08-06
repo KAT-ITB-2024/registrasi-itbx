@@ -31,7 +31,7 @@ export const itbGotTalentRegistrants = createTable("itbGotTalentRegistrants", {
   instance: itbGotTalentInstanceEnum("instance").notNull(),
   category: itbGotTalentCategoryEnum("category").notNull(),
   name: varchar("name", { length: 255 }).notNull(),
-  nim: varchar("nim", { length: 100 }).notNull(),
+  nim: varchar("nim", { length: 8 }).notNull(),
   programStudi: varchar("programStudi", { length: 255 }).notNull(),
   lineId: varchar("lineId", { length: 255 }).notNull(),
   phoneNumber: varchar("phoneNumber", { length: 20 }).notNull(),

@@ -17,21 +17,52 @@ export const itbGotTalentRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(
-      z.object({
-        instance: z.enum(itbGotTalentInstanceEnum.enumValues),
-        category: z.enum(itbGotTalentCategoryEnum.enumValues),
-        name: z.string().min(1),
-        nim: z.string().min(1),
-        programStudi: z.string().min(1),
-        lineId: z.string().min(1),
-        phoneNumber: z.string().min(1),
-        instagram: z.string().min(1),
-        groupName: z.string().min(1),
-        members: z.array(z.string()).default([]),
-        ktmPath: z.string().min(1),
-        description: z.string().min(1),
-        videoLink: z.string().min(1),
-      }),
+      z
+        .object({
+          instance: z.enum(itbGotTalentInstanceEnum.enumValues),
+          category: z.enum(itbGotTalentCategoryEnum.enumValues),
+          name: z.string().min(1),
+          nim: z.string().length(8),
+          programStudi: z.string().min(1),
+          lineId: z.string().min(1),
+          phoneNumber: z.string().min(1),
+          instagram: z.string().min(1),
+          groupName: z.string().optional().nullable(),
+          members: z.array(z.string()).default([]),
+          ktmPath: z.string().min(1),
+          description: z.string().min(1),
+          videoLink: z.string().min(1),
+        })
+        .refine(
+          (data) => {
+            if (data.category === "Kelompok") {
+              return data.groupName !== null && data.groupName !== "";
+            } else if (data.category === "Individu") {
+              return data.groupName === null || data.groupName === "";
+            }
+            return true;
+          },
+          {
+            message:
+              "Group name is required when the category is 'kelompok' and must be null when the category is 'individu'",
+            path: ["groupName"],
+          },
+        )
+        .refine(
+          (data) => {
+            if (data.category === "Kelompok") {
+              return data.members.length > 0;
+            } else if (data.category === "Individu") {
+              return data.members.length === 0;
+            }
+            return true;
+          },
+          {
+            message:
+              "Members are required when the category is 'kelompok' and must be null when the category is 'individu'",
+            path: ["members"],
+          },
+        ),
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(itbGotTalentRegistrants).values({

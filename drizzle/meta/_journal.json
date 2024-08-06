@@ -15,6 +15,13 @@
       "when": 1722872915639,
       "tag": "0001_awesome_supreme_intelligence",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1722911936170,
+      "tag": "0002_nostalgic_ultimo",
+      "breakpoints": true
     }
   ]
 }
