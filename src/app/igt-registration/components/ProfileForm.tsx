@@ -160,6 +160,28 @@ const ProfileForm = ({
           />
           <FormField
             control={form.control}
+            name="lineId"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel
+                  htmlFor="lineId"
+                  className="text-[16px] font-medium text-primary-500"
+                >
+                  Line ID {isGroup && "Perwakilan Tim"} *
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    id="lineId"
+                    placeholder="Masukkan ID Line"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="instagram"
             render={({ field }) => (
               <FormItem className="space-y-1">
