@@ -21,7 +21,7 @@ export const StorageRouter = createTRPCRouter({
             Bucket: env.DO_BUCKET_NAME,
             Key: input.folder + "/" + input.fileName,
           }),
-          { expiresIn: 3600 },
+          { expiresIn: 3600 * 24 * 7 },
         );
 
         return fileUrl;

@@ -51,7 +51,7 @@ const uploadFile = async (file: File, fileName: string, folder: FolderEnum) => {
   try {
     const fileUUID = uuidv4();
     const sanitizedFileName = sanitize(fileName);
-    const sanitizedFilename = `${fileUUID}-${sanitizedFileName}`;
+    const sanitizedFilename = `${fileUUID}-${sanitizedFileName}.zip`;
 
     const fileContent = Buffer.from(await file.arrayBuffer());
 
