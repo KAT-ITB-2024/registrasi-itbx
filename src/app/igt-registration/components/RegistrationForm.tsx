@@ -12,6 +12,7 @@ import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
 import { api } from "~/trpc/react";
 import SuccessModal from "~/components/SuccessModal";
+import { toast } from "sonner";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -93,7 +94,12 @@ const RegistrationForm = () => {
     );
     const groupName =
       categoryForm.getValues("category") === "Kelompok" ? values.groupName : "";
+    const toastId = toast("toast");
     try {
+      toast.loading("Loading...", {
+        id: toastId,
+      });
+
       const res = await submitMutation.mutateAsync({
         instance: categoryForm.getValues("instance"),
         category: categoryForm.getValues("category"),
@@ -109,12 +115,16 @@ const RegistrationForm = () => {
         description: values.description,
         videoLink: values.videoLink,
       });
-    } catch (error) {
-      console.error(error);
-    }
 
-    setIsAlertOpen(false);
-    setIsSuccessModalOpen(true);
+      toast.dismiss(toastId);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      toast.error("Gagal mendaftar, silahkan coba lagi", {
+        id: toastId,
+      });
+    } finally {
+      setIsAlertOpen(false);
+    }
   };
 
   const handleNext = () => {
