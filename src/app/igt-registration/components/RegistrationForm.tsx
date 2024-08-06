@@ -11,6 +11,8 @@ import ProfileForm from "./ProfileForm";
 import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
 import { api } from "~/trpc/react";
+import SuccessModal from "~/components/SuccessModal";
+import { toast } from "sonner";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -60,6 +62,7 @@ export const categorySchema = z.object({
 const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const categoryForm = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
@@ -77,13 +80,7 @@ const RegistrationForm = () => {
       lineId: "kevin.sst",
       phoneNumber: "085236961165",
       instagram: "Halo",
-      members: [
-        {
-          name: "Abdul Aziz",
-          nim: "18221143",
-          programStudi: "Teknik Informatika",
-        },
-      ],
+      members: [],
       ktm: undefined,
       description: "adwdawd",
       videoLink:
@@ -95,30 +92,57 @@ const RegistrationForm = () => {
     const members = values.members.map(
       (member) => `${member.name}-${member.nim}-${member.programStudi}`,
     );
-    const res = await submitMutation.mutateAsync({
-      instance: categoryForm.getValues("instance"),
-      category: categoryForm.getValues("category"),
-      groupName: values.groupName,
-      name: values.name,
-      nim: values.nim,
-      programStudi: values.programStudi,
-      lineId: values.lineId,
-      phoneNumber: values.phoneNumber,
-      instagram: values.instagram,
-      members: members,
-      ktmPath: "belomada",
-      description: values.description,
-      videoLink: values.videoLink,
-    });
+    const groupName =
+      categoryForm.getValues("category") === "Kelompok" ? values.groupName : "";
+    const toastId = toast("toast");
+    try {
+      toast.loading("Loading...", {
+        id: toastId,
+      });
 
-    console.log(res);
+      const res = await submitMutation.mutateAsync({
+        instance: categoryForm.getValues("instance"),
+        category: categoryForm.getValues("category"),
+        groupName: groupName,
+        name: values.name,
+        nim: values.nim,
+        programStudi: values.programStudi,
+        lineId: values.lineId,
+        phoneNumber: values.phoneNumber,
+        instagram: values.instagram,
+        members: members,
+        ktmPath: "belomada",
+        description: values.description,
+        videoLink: values.videoLink,
+      });
+
+      toast.dismiss(toastId);
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      toast.error("Gagal mendaftar, silahkan coba lagi", {
+        id: toastId,
+      });
+    } finally {
+      setIsAlertOpen(false);
+    }
   };
 
   const handleNext = () => {
     const groupName =
       categoryForm.watch("category") === "Kelompok" ? "" : "Individu";
+    const newMember =
+      categoryForm.watch("category") === "Kelompok"
+        ? [{ name: "", nim: "", programStudi: "" }]
+        : [];
     form.setValue("groupName", groupName);
+    form.setValue("members", newMember);
     setIsProfileForm(true);
+  };
+
+  const handleReset = () => {
+    form.reset();
+    categoryForm.reset();
+    setIsProfileForm(false);
   };
 
   const handleSubmit = form.handleSubmit(onSubmit);
@@ -146,6 +170,11 @@ const RegistrationForm = () => {
         open={isAlertOpen}
         setOpen={setIsAlertOpen}
         handleAction={handleSubmit}
+      />
+      <SuccessModal
+        open={isSuccessModalOpen}
+        setOpen={setIsSuccessModalOpen}
+        onClose={() => handleReset()}
       />
     </div>
   );
