@@ -1,0 +1,1 @@
+ALTER TABLE "itbGotTalentRegistrants" ALTER COLUMN "ktmPath" SET DATA TYPE varchar(1000);

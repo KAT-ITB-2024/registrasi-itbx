@@ -287,7 +287,12 @@ const ProfileForm = ({
                   </TooltipProvider>
                 </div>
                 <FormControl>
-                  <Input {...fileRef} id="ktm" type="file" />
+                  <Input
+                    {...fileRef}
+                    id="ktm"
+                    type="file"
+                    accept="application/zip"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

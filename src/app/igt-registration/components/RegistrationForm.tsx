@@ -11,8 +11,10 @@ import ProfileForm from "./ProfileForm";
 import styles from "./styles.module.css";
 import AlertModal from "~/components/AlertModal";
 import { api } from "~/trpc/react";
+import { uploadFile } from "~/lib/files";
 import SuccessModal from "~/components/SuccessModal";
 import { toast } from "sonner";
+import { FolderEnum } from "~/server/bucket";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/zip", "application/x-zip-compressed"];
@@ -63,12 +65,14 @@ const RegistrationForm = () => {
   const [isProfileForm, setIsProfileForm] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const categoryForm = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
   });
 
   const submitMutation = api.itbGotTalent.create.useMutation();
+  const generateUrlForUpload = api.storage.genereateURLForUpload.useMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,11 +100,25 @@ const RegistrationForm = () => {
       categoryForm.getValues("category") === "Kelompok" ? values.groupName : "";
     const toastId = toast("toast");
     try {
+      setIsLoading(true);
       toast.loading("Loading...", {
         id: toastId,
       });
 
-      const res = await submitMutation.mutateAsync({
+      const ktmFile = values.ktm[0];
+      const fileName = values.nim;
+      const ktmFilename = await uploadFile(
+        ktmFile!,
+        fileName,
+        FolderEnum.ITBGOTTALENT,
+      );
+
+      const ktmPath = await generateUrlForUpload.mutateAsync({
+        folder: FolderEnum.ITBGOTTALENT,
+        fileName: ktmFilename,
+      });
+
+      await submitMutation.mutateAsync({
         instance: categoryForm.getValues("instance"),
         category: categoryForm.getValues("category"),
         groupName: groupName,
@@ -111,7 +129,7 @@ const RegistrationForm = () => {
         phoneNumber: values.phoneNumber,
         instagram: values.instagram,
         members: members,
-        ktmPath: "belomada",
+        ktmPath: ktmPath, // Use the URL of the uploaded KTM file
         description: values.description,
         videoLink: values.videoLink,
       });
@@ -123,6 +141,7 @@ const RegistrationForm = () => {
         id: toastId,
       });
     } finally {
+      setIsLoading(false);
       setIsAlertOpen(false);
     }
   };
@@ -170,6 +189,7 @@ const RegistrationForm = () => {
         open={isAlertOpen}
         setOpen={setIsAlertOpen}
         handleAction={handleSubmit}
+        isLoading={isLoading}
       />
       <SuccessModal
         open={isSuccessModalOpen}

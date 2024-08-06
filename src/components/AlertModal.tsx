@@ -17,20 +17,23 @@ const AlertModal = ({
   open,
   setOpen,
   handleAction,
+  isLoading,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
   handleAction: () => void;
+  isLoading: boolean;
 }) => {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent className="max-w-[386px] bg-[#FEFDA3] py-10">
-        <div
+        <button
           className="absolute right-4 top-4 text-primary-500"
           onClick={() => setOpen(false)}
+          disabled={isLoading}
         >
           <IoClose size={24} />
-        </div>
+        </button>
         <AlertDialogHeader className="flex flex-col items-center">
           <Image
             src={"/icon/question-mark.svg"}
@@ -47,13 +50,11 @@ const AlertModal = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction className="w-full px-0">
-            <form onSubmit={handleAction} className="w-full">
-              <Button type="submit" className="w-full">
-                Continue
-              </Button>
-            </form>
-          </AlertDialogAction>
+          <form onSubmit={handleAction} className="w-full">
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              Continue
+            </Button>
+          </form>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
