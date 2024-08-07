@@ -15,14 +15,4 @@ const s3Client = new S3({
   },
 });
 
-// const s3Client = new S3({
-//   forcePathStyle: false,
-//   region: "us-east-1",
-//   endpoint: "https://sgp1.digitaloceanspaces.com",
-//   credentials: {
-//     accessKeyId: "DO00AWLTKLE37YQAKZUF",
-//     secretAccessKey: "gEopqH2JTEVnlamhiAdSDLGiWdRpqjDheapFFfEpCcU",
-//   },
-// });
-
 export { s3Client };
