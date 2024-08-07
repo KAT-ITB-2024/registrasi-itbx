@@ -41,13 +41,7 @@ export const fakultasEnum = pgEnum("fakultas", [
   "STEI",
 ]);
 
-export const angkatanEnum = pgEnum("angkatan", [
-  "2021",
-  "2022",
-  "2023",
-  "2024",
-  "2025",
-]);
+export const angkatanEnum = pgEnum("angkatan", ["2021", "2022", "2023"]);
 
 export const lembagaEnum = pgEnum("lembaga", [
   "Lembaga 1",
@@ -60,7 +54,7 @@ export const secondPartyContactAppEnum = pgEnum("secondPartyContactApp", [
   "ID Line",
 ]);
 
-export const paymentTypeEnum = pgEnum("paymentOption", [
+export const paymentTypeEnum = pgEnum("paymentType", [
   "Lembaga 2",
   "Eksternal",
 ]);
@@ -100,7 +94,7 @@ export const itbGotTalentRegistrants = createTable("itbGotTalentRegistrants", {
 export const lembagas = createTable("lembagas", {
   id: text("id").primaryKey().$defaultFn(createId),
   name: varchar("name", { length: 255 }).notNull(),
-  nim: varchar("nim", { length: 8 }).notNull(),
+  nim: varchar("nim", { length: 8 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   fakultas: fakultasEnum("fakultas").notNull(),
   programStudi: varchar("programStudi", { length: 255 }).notNull(),
@@ -124,9 +118,7 @@ export const lembagas = createTable("lembagas", {
   paymentOption: paymentOptionEnum("paymentOption").notNull(),
   accountName: varchar("accountName", { length: 255 }).notNull(),
   paymentProofPath: varchar("paymentProofPath", { length: 1000 }).notNull(),
-  boothId: text("boothId")
-    .notNull()
-    .references(() => booths.id, { onDelete: "cascade" }),
+  boothId: text("boothId").references(() => booths.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt", {
     mode: "date",
     withTimezone: true,

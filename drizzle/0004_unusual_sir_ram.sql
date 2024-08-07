@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."angkatan" AS ENUM('2021', '2022', '2023', '2024', '2025');
+ CREATE TYPE "public"."angkatan" AS ENUM('2021', '2022', '2023');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -17,7 +17,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "public"."paymentOption" AS ENUM('Lembaga 2', 'Eksternal');
+ CREATE TYPE "public"."paymentOption" AS ENUM('QRIS', 'Transfer');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."paymentType" AS ENUM('Lembaga 2', 'Eksternal');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -54,13 +60,14 @@ CREATE TABLE IF NOT EXISTS "lembagas" (
 	"position" varchar(255) NOT NULL,
 	"isNoisy" boolean NOT NULL,
 	"commitmentSheetPath" varchar(1000) NOT NULL,
-	"paymentType" "paymentOption" NOT NULL,
+	"paymentType" "paymentType" NOT NULL,
 	"paymentOption" "paymentOption" NOT NULL,
 	"accountName" varchar(255) NOT NULL,
 	"paymentProofPath" varchar(1000) NOT NULL,
-	"boothId" text NOT NULL,
+	"boothId" text,
 	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
-	"updatedAt" timestamp with time zone NOT NULL
+	"updatedAt" timestamp with time zone NOT NULL,
+	CONSTRAINT "lembagas_nim_unique" UNIQUE("nim")
 );
 --> statement-breakpoint
 DO $$ BEGIN

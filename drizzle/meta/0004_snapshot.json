@@ -1,5 +1,5 @@
 {
-  "id": "cd837971-658f-4431-b44b-0dd0aefa55ff",
+  "id": "671b2f09-4c11-4ff3-a472-7000b7099ddd",
   "prevId": "0f8ddba1-48d8-498f-9616-fd664372e17d",
   "version": "6",
   "dialect": "postgresql",
@@ -266,7 +266,7 @@
         },
         "paymentType": {
           "name": "paymentType",
-          "type": "paymentOption",
+          "type": "paymentType",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -294,7 +294,7 @@
           "name": "boothId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -327,7 +327,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "lembagas_nim_unique": {
+          "name": "lembagas_nim_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "nim"
+          ]
+        }
+      }
     }
   },
   "enums": {
@@ -337,9 +345,7 @@
       "values": [
         "2021",
         "2022",
-        "2023",
-        "2024",
-        "2025"
+        "2023"
       ]
     },
     "public.fakultas": {
@@ -387,6 +393,14 @@
     },
     "public.paymentOption": {
       "name": "paymentOption",
+      "schema": "public",
+      "values": [
+        "QRIS",
+        "Transfer"
+      ]
+    },
+    "public.paymentType": {
+      "name": "paymentType",
       "schema": "public",
       "values": [
         "Lembaga 2",
