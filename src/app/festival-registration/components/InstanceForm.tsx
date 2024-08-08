@@ -54,7 +54,7 @@ const InstanceForm = ({
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Pilih Fakultas" />
+                      <SelectValue placeholder="Pilih Lembaga" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -262,7 +262,7 @@ const InstanceForm = ({
               Kembali
             </Button>
             <Button className="flex-1" type="submit">
-              Daftar
+              Selanjutnya
             </Button>
           </div>
         </form>

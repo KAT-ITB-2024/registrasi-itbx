@@ -24,6 +24,7 @@ import PaymentForm from "./PaymentForm";
 import { api } from "~/trpc/react";
 import { uploadFile } from "~/lib/files";
 import { FolderEnum } from "~/server/bucket";
+import Link from "next/link";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_FILE_TYPES = ["application/pdf"];
@@ -246,6 +247,26 @@ const RegistrationForm = () => {
 
   const instanceType = instanceForm.getValues("type");
 
+  const description = (
+    <p>
+      Terima kasih telah mendaftarkan lembaga Anda di Festival ITBx OSKM ITB
+      2024.
+      <br />
+      <br />
+      Untuk mempermudah penyampaian informasi dan diskusi, silahkan{" "}
+      <b>bergabung</b> dalam grup berikut{" "}
+      <Link
+        target="_blank"
+        href="https://line.me/ti/g/286mmjo0ab"
+        className="font-semibold underline"
+      >
+        {" "}
+        https://line.me/ti/g/286mmjo0ab{" "}
+      </Link>{" "}
+      dan mengisi dokumen berikut (link menyusul)
+    </p>
+  );
+
   return (
     <div className="z-10 flex h-screen w-full max-w-xl items-center md:py-12">
       <div
@@ -287,6 +308,7 @@ const RegistrationForm = () => {
         open={isSuccessModalOpen}
         setOpen={setIsSuccessModalOpen}
         onClose={handleReset}
+        description={description}
       />
     </div>
   );

@@ -107,7 +107,7 @@ const CommitmentForm = ({
               Kembali
             </Button>
             <Button className="flex-1" type="submit">
-              Daftar
+              Selanjutnya
             </Button>
           </div>
         </form>

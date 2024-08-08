@@ -92,6 +92,13 @@ const PaymentForm = ({
         </ul>
         <p>
           <br />
+          Tuliskan{" "}
+          <span className="rounded-md bg-primary-400 px-1 py-0.5 text-white">
+            Nama Lembaga_Tujuan Pembayaran
+          </span>{" "}
+          di <b>deskripsi transfer</b> dan <b>nama file bukti pembayaran</b>.
+          <br />
+          <br />
           Dengan mengirimkan MOU yang telah ditandatangani dan Commitment Fee,
           berarti lembaga yang terdaftar <b>WAJIB</b> mematuhi seluruh aturan
           yang berlaku
