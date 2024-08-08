@@ -6,7 +6,6 @@ import {
   lembagaEnum,
   lembagas,
   paymentOptionEnum,
-  paymentTypeEnum,
   secondPartyContactAppEnum,
 } from "~/server/db/schema";
 import { hash } from "bcrypt";
@@ -34,7 +33,6 @@ export const lembagaRouter = createTRPCRouter({
         position: z.string().min(1),
         isNoisy: z.boolean(),
         commitmentSheetPath: z.string().min(1),
-        paymentType: z.enum(paymentTypeEnum.enumValues),
         paymentOption: z.enum(paymentOptionEnum.enumValues),
         accountName: z.string().min(1),
         paymentProofPath: z.string().min(1),
@@ -46,7 +44,7 @@ export const lembagaRouter = createTRPCRouter({
         .from(lembagas)
         .where(eq(lembagas.nim, input.nim))
         .then((res) => res.length > 0);
-      
+
       if (existingNim) {
         throw new TRPCError({
           code: "BAD_REQUEST",

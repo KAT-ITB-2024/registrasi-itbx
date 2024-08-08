@@ -3,6 +3,8 @@ import { env } from "~/env";
 
 export enum FolderEnum {
   ITBGOTTALENT = "itbGotTalent",
+  COMMITMENT = "commitment",
+  PAYMENT = "payment",
 }
 
 const s3Client = new S3({

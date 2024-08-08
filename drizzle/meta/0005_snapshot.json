@@ -1,0 +1,384 @@
+{
+  "id": "615b83ed-ea17-4430-8c56-73663b572161",
+  "prevId": "671b2f09-4c11-4ff3-a472-7000b7099ddd",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.booths": {
+      "name": "booths",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.itbGotTalentRegistrants": {
+      "name": "itbGotTalentRegistrants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "instance": {
+          "name": "instance",
+          "type": "itbGotTalentInstance",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "itbGotTalentCategory",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nim": {
+          "name": "nim",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "programStudi": {
+          "name": "programStudi",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lineId": {
+          "name": "lineId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phoneNumber": {
+          "name": "phoneNumber",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "instagram": {
+          "name": "instagram",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupName": {
+          "name": "groupName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "members": {
+          "name": "members",
+          "type": "varchar(255)[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "ARRAY[]::varchar[]"
+        },
+        "ktmPath": {
+          "name": "ktmPath",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "videoLink": {
+          "name": "videoLink",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.lembagas": {
+      "name": "lembagas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nim": {
+          "name": "nim",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fakultas": {
+          "name": "fakultas",
+          "type": "fakultas",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "programStudi": {
+          "name": "programStudi",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "angkatan": {
+          "name": "angkatan",
+          "type": "varchar(4)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lineId": {
+          "name": "lineId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phoneNumber": {
+          "name": "phoneNumber",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lembaga": {
+          "name": "lembaga",
+          "type": "lembaga",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lembagaName": {
+          "name": "lembagaName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondPartyName": {
+          "name": "secondPartyName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondPartyNim": {
+          "name": "secondPartyNim",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondPartyContactApp": {
+          "name": "secondPartyContactApp",
+          "type": "secondPartyContactApp",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "secondPartyContact": {
+          "name": "secondPartyContact",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isNoisy": {
+          "name": "isNoisy",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "commitmentSheetPath": {
+          "name": "commitmentSheetPath",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "paymentOption": {
+          "name": "paymentOption",
+          "type": "paymentOption",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accountName": {
+          "name": "accountName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "paymentProofPath": {
+          "name": "paymentProofPath",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boothId": {
+          "name": "boothId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lembagas_boothId_booths_id_fk": {
+          "name": "lembagas_boothId_booths_id_fk",
+          "tableFrom": "lembagas",
+          "tableTo": "booths",
+          "columnsFrom": ["boothId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "lembagas_nim_unique": {
+          "name": "lembagas_nim_unique",
+          "nullsNotDistinct": false,
+          "columns": ["nim"]
+        }
+      }
+    }
+  },
+  "enums": {
+    "public.angkatan": {
+      "name": "angkatan",
+      "schema": "public",
+      "values": ["2021", "2022", "2023"]
+    },
+    "public.fakultas": {
+      "name": "fakultas",
+      "schema": "public",
+      "values": [
+        "FITB",
+        "FMIPA",
+        "FSRD",
+        "FTMD",
+        "FTTM",
+        "FTSL",
+        "FTI",
+        "SAPPK",
+        "SBM",
+        "SF",
+        "SITH",
+        "STEI"
+      ]
+    },
+    "public.itbGotTalentCategory": {
+      "name": "itbGotTalentCategory",
+      "schema": "public",
+      "values": ["Individu", "Kelompok"]
+    },
+    "public.itbGotTalentInstance": {
+      "name": "itbGotTalentInstance",
+      "schema": "public",
+      "values": ["UKM", "Non-Lembaga"]
+    },
+    "public.lembaga": {
+      "name": "lembaga",
+      "schema": "public",
+      "values": ["Lembaga 1", "Lembaga 2", "Lembaga 3"]
+    },
+    "public.paymentOption": {
+      "name": "paymentOption",
+      "schema": "public",
+      "values": ["BRI", "Gopay"]
+    },
+    "public.secondPartyContactApp": {
+      "name": "secondPartyContactApp",
+      "schema": "public",
+      "values": ["Nomor WhatsApp", "ID Line"]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

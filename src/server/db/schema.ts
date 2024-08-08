@@ -54,12 +54,7 @@ export const secondPartyContactAppEnum = pgEnum("secondPartyContactApp", [
   "ID Line",
 ]);
 
-export const paymentTypeEnum = pgEnum("paymentType", [
-  "Lembaga 2",
-  "Eksternal",
-]);
-
-export const paymentOptionEnum = pgEnum("paymentOption", ["QRIS", "Transfer"]);
+export const paymentOptionEnum = pgEnum("paymentOption", ["BRI", "Gopay"]);
 
 export const itbGotTalentRegistrants = createTable("itbGotTalentRegistrants", {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -114,7 +109,6 @@ export const lembagas = createTable("lembagas", {
   commitmentSheetPath: varchar("commitmentSheetPath", {
     length: 1000,
   }).notNull(),
-  paymentType: paymentTypeEnum("paymentType").notNull(),
   paymentOption: paymentOptionEnum("paymentOption").notNull(),
   accountName: varchar("accountName", { length: 255 }).notNull(),
   paymentProofPath: varchar("paymentProofPath", { length: 1000 }).notNull(),
