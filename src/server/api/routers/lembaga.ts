@@ -10,6 +10,8 @@ import {
   secondPartyContactAppEnum,
 } from "~/server/db/schema";
 import { hash } from "bcrypt";
+import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 
 export const lembagaRouter = createTRPCRouter({
   registerLembaga: publicProcedure
@@ -39,8 +41,21 @@ export const lembagaRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const hashedPassword = await hash(input.password, 10);
+      const existingNim = await ctx.db
+        .select({ nim: lembagas.nim })
+        .from(lembagas)
+        .where(eq(lembagas.nim, input.nim))
+        .then((res) => res.length > 0);
       
+      if (existingNim) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "NIM already exist",
+        });
+      }
+
+      const hashedPassword = await hash(input.password, 10);
+
       await ctx.db.insert(lembagas).values({
         ...input,
         password: hashedPassword,
