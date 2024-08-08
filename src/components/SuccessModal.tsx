@@ -9,15 +9,18 @@ import {
 import Image from "next/image";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import React from "react";
 
 const SuccessModal = ({
   open,
   setOpen,
   onClose,
+  description,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
   onClose?: () => void;
+  description: React.ReactNode;
 }) => {
   const handleClose = () => {
     onClose && onClose();
@@ -44,7 +47,7 @@ const SuccessModal = ({
             Pendaftaran Berhasil
           </DialogTitle>
           <DialogDescription className="text-center text-[14px] text-primary-500">
-            Terima kasih telah mendaftar pada Acara ITB Got Talent!
+            {description}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

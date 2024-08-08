@@ -194,6 +194,7 @@ const RegistrationForm = () => {
         open={isSuccessModalOpen}
         setOpen={setIsSuccessModalOpen}
         onClose={() => handleReset()}
+        description="Terima kasih telah mendaftar pada Acara ITB Got Talent!"
       />
     </div>
   );
