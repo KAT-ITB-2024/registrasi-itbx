@@ -1,6 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { itbGotTalentRouter } from "./routers/itbGotTalent";
 import { StorageRouter } from "./routers/storage";
+import { lembagaRouter } from "./routers/lembaga";
 
 /**
  * This is the primary router for your server.
@@ -9,6 +10,7 @@ import { StorageRouter } from "./routers/storage";
  */
 export const appRouter = createTRPCRouter({
   itbGotTalent: itbGotTalentRouter,
+  lembaga: lembagaRouter,
   storage: StorageRouter,
 });
 

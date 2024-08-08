@@ -7,14 +7,6 @@ import {
 } from "~/server/db/schema";
 
 export const itbGotTalentRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: publicProcedure
     .input(
       z
