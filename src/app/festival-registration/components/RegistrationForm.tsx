@@ -262,8 +262,7 @@ const RegistrationForm = () => {
       >
         {" "}
         https://line.me/ti/g/286mmjo0ab{" "}
-      </Link>{" "}
-      dan mengisi dokumen berikut (link menyusul)
+      </Link>
     </p>
   );
 

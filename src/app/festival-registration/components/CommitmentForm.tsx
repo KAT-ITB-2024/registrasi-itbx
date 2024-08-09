@@ -42,8 +42,16 @@ const CommitmentForm = ({
           akan berlaku (TOR dan SOP dapat diakses pada linktree yang tertera)
           <br />
           <br />
-          Lembaga yang akan berpartisipasi wajib memahami isi MOU Keikutsertaan
-          serta menandatanganinya pada link berikut.
+          Lembaga yang akan berpartisipasi diharapkan membaca{" "}
+          <Link
+            target="_blank"
+            href="https://drive.google.com/drive/u/3/folders/1v3AdbLeUFYrQ-0ZmttUwB3znTedzvpoQ"
+            className="font-bold underline"
+          >
+            guidebook
+          </Link>{" "}
+          ini serta wajib memahami isi MOU Keikutsertaan serta menandatanganinya
+          pada link berikut.
           <br />
           <br />
         </p>

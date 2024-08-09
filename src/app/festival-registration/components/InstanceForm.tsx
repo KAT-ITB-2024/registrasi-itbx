@@ -57,16 +57,17 @@ const InstanceForm = ({
                       <SelectValue placeholder="Pilih Lembaga" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="max-w-[20rem] sm:max-w-[31rem]">
                     <SelectItem value="Lembaga 1">
-                      Lembaga 1: UKM dan BSO (di bawah kabinet)
+                      Lembaga 1 (UKM dan BSO di bawah kabinet)
                     </SelectItem>
                     <SelectItem value="Lembaga 2">
-                      Lembaga 2: HMPS, BSO HMPS, KM ITB, Keresidenan
-                      Multikampus, KKN ITB
+                      Lembaga 2 (HMPS, BSO HMPS, Kabinet, MWA WM, Kongres,
+                      Keresidenan Multikampus, KKN ITB)
                     </SelectItem>
                     <SelectItem value="Lembaga 3">
-                      Eksternal: Organisasi Intrakampus, Student Chapter, dll
+                      Eksternal (Organisasi Intrakampus, Student Chapter, dll di
+                      luar kabinet)
                     </SelectItem>
                   </SelectContent>
                 </Select>
