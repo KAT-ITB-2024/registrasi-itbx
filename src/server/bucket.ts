@@ -3,6 +3,8 @@ import { env } from "~/env";
 
 export enum FolderEnum {
   ITBGOTTALENT = "itbGotTalent",
+  COMMITMENT = "commitment",
+  PAYMENT = "payment",
 }
 
 const s3Client = new S3({
@@ -14,15 +16,5 @@ const s3Client = new S3({
     secretAccessKey: env.NEXT_PUBLIC_DO_SECRET_KEY ?? "",
   },
 });
-
-// const s3Client = new S3({
-//   forcePathStyle: false,
-//   region: "us-east-1",
-//   endpoint: "https://sgp1.digitaloceanspaces.com",
-//   credentials: {
-//     accessKeyId: "DO00AWLTKLE37YQAKZUF",
-//     secretAccessKey: "gEopqH2JTEVnlamhiAdSDLGiWdRpqjDheapFFfEpCcU",
-//   },
-// });
 
 export { s3Client };

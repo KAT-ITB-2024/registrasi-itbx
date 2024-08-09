@@ -49,11 +49,14 @@ const AlertModal = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <form onSubmit={handleAction} className="w-full">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              Continue
-            </Button>
-          </form>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            onClick={handleAction}
+          >
+            Continue
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
