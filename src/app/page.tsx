@@ -16,6 +16,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { getCsrfToken, signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   nim: z.string().regex(/^\d{8}$/, "Masukkan NIM yang valid"),
@@ -23,6 +26,8 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const router = useRouter();
+
   // TODO: If already logged in, redirect to booking-booth page
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -33,7 +38,27 @@ export default function Home() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      const { nim, password } = values;
+      const csrfToken = await getCsrfToken();
+
+      const res = await signIn("credentials", {
+        nim,
+        password,
+        csrfToken,
+        redirect: false,
+        callbackUrl: "/login",
+      });
+
+      if (!res?.error) {
+        toast.success("Logged in successfully!");
+        router.push("/");
+      } else {
+        toast.error("Invalid Username or Password");
+      }
+    } catch (err) {
+      toast.error("Login Failed");
+    }
   };
 
   return (
@@ -48,7 +73,7 @@ export default function Home() {
             height={150}
             alt="logo"
           />
-          <h1 className="text-5xl font-mogula text-primary my-3">Login</h1>
+          <h1 className="my-3 font-mogula text-5xl text-primary">Login</h1>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -66,11 +91,7 @@ export default function Home() {
                       NIM
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        id="nim"
-                        placeholder="Masukkan NIM"
-                      />
+                      <Input {...field} id="nim" placeholder="Masukkan NIM" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +119,7 @@ export default function Home() {
                   </FormItem>
                 )}
               />
-              <div className="h-5"/>
+              <div className="h-5" />
               <Button type="submit">Login</Button>
             </form>
           </Form>

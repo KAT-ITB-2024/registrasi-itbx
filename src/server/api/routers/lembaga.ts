@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+} from "~/server/api/trpc";
 import {
   angkatanEnum,
   fakultasEnum,
@@ -65,11 +69,23 @@ export const lembagaRouter = createTRPCRouter({
       return { message: "Registrant created" };
     }),
 
-  getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.itbGotTalentRegistrants.findFirst({
-      orderBy: (itbGotTalentRegistrants, { desc }) => [
-        desc(itbGotTalentRegistrants.createdAt),
-      ],
+  getLembaga: protectedProcedure.query(async ({ ctx }) => {
+    const lembagaWithBoothCode = await ctx.db.query.lembagas.findFirst({
+      columns: {
+        lembaga: true,
+        lembagaName: true,
+        boothId: true,
+      },
+      where: (lembagas, { eq }) => eq(lembagas.id, ctx.session.user.id),
+      with: {
+        booth: {
+          columns: {
+            code: true,
+          },
+        },
+      },
     });
+
+    return lembagaWithBoothCode;
   }),
 });
