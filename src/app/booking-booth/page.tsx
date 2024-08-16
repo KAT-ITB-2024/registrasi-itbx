@@ -1,9 +1,7 @@
 import Image from "next/image";
 import BookingForm from "./components/BookingForm";
 import { api } from "~/trpc/server";
-import type { Lembagas } from "~/server/db/schema";
 import { redirect } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { getServerAuthSession } from "~/server/auth";
 
 type LembagaType = {
@@ -30,7 +28,7 @@ const Page = async () => {
   
   const lembaga: LembagaType | undefined = await api.lembaga.getLembaga();
   
-  const availableBooths = await api.booth.getAllBooths();
+  const availableBooths = await api.booth.getAvailableBooths();
 
   if(!lembaga) {
     redirect("/");

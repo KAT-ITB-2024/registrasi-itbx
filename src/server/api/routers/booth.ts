@@ -1,12 +1,19 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { booths, lembagas } from "~/server/db/schema";
+import { lembagas } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
 export const boothRouter = createTRPCRouter({
-  getAllBooths: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.select().from(booths);
+  getAvailableBooths: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.booths.findMany({
+      where: (booths, { isNull }) => 
+        isNull(
+          ctx.db.select({ boothId: lembagas.boothId })
+            .from(lembagas)
+            .where(eq(lembagas.boothId, booths.id))
+        )
+    });
   }),
 
   registerLembagaBooth: protectedProcedure
