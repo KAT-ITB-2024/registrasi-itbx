@@ -1,7 +1,41 @@
 import Image from "next/image";
 import BookingForm from "./components/BookingForm";
+import { api } from "~/trpc/server";
+import type { Lembagas } from "~/server/db/schema";
+import { redirect } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { getServerAuthSession } from "~/server/auth";
 
-const Page = () => {
+type LembagaType = {
+  lembaga: "Lembaga 1" | "Lembaga 2" | "Lembaga 3";
+  lembagaName: string;
+  boothId: string | null;
+  booth: {
+    code: string;
+  } | null;
+};
+
+export type BoothType = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  code: string;
+};
+
+const Page = async () => {
+  const session = await getServerAuthSession();
+  if (!session) {
+    redirect("/"); // Redirect to login page
+  }
+  
+  const lembaga: LembagaType | undefined = await api.lembaga.getLembaga();
+  
+  const availableBooths = await api.booth.getAllBooths();
+
+  if(!lembaga) {
+    redirect("/");
+  }
+
   return (
     <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[url('/images/pink-background.png')] bg-cover bg-center bg-no-repeat">
       <Image
@@ -19,21 +53,10 @@ const Page = () => {
         className="absolute bottom-0 right-0 hidden h-[336px] w-[448px] md:block"
       />
       <BookingForm
-        availableBooths={[
-          "A1",
-          "A2",
-          "A3",
-          "A4",
-          "A5",
-          "A6",
-          "A7",
-          "A8",
-          "A9",
-          "A10",
-        ]}
-        instanceName="Himpunan Mahasiswa Informatika"
-        instanceType="Lembaga 2"
-        selectedBooth=""
+        availableBooths={availableBooths}
+        instanceName={lembaga.lembagaName}
+        instanceType={lembaga.lembaga}
+        selectedBooth={lembaga.booth?.code}
       />
     </div>
   );

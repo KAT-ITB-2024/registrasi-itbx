@@ -30,6 +30,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AlertModal from "~/components/AlertModal";
 import { toast } from "sonner";
+import { BoothType } from "../page";
+import { api } from "~/trpc/react";
+import { signOut } from "next-auth/react";
 
 const formSchema = z.object({
   boothCode: z.string().min(1, "Kode Booth harus diisi"),
@@ -41,7 +44,7 @@ const BookingForm = ({
   instanceType,
   selectedBooth,
 }: {
-  availableBooths: string[];
+  availableBooths: BoothType[];
   instanceName: string;
   instanceType: string;
   selectedBooth?: string;
@@ -49,6 +52,8 @@ const BookingForm = ({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const boothMutation = api.booth.registerLembagaBooth.useMutation();
 
   const router = useRouter();
 
@@ -67,12 +72,17 @@ const BookingForm = ({
     const toastId = toast("toast");
     try {
       setIsLoading(true);
-      // toast.loading("Loading...", {
-      //   id: toastId,
-      // });
+      toast.loading("Loading...", {
+        id: toastId,
+      });
+
       const formValues = form.getValues();
-      console.log(formValues);
-      // toast.dismiss(toastId);
+
+      await boothMutation.mutateAsync({
+        boothId: formValues.boothCode,
+      });
+
+      toast.dismiss(toastId);
       setIsSuccessModalOpen(true);
     } catch (error) {
       toast.error("Gagal mendaftar, silahkan coba lagi", {
@@ -89,6 +99,11 @@ const BookingForm = ({
     router.refresh();
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
   return (
     <div className="z-10 flex h-screen w-full max-w-xl items-center md:py-12">
       <div
@@ -98,17 +113,25 @@ const BookingForm = ({
           <h1 className="text-center font-mogula text-4xl text-primary">
             Booking Booth ITB-x
           </h1>
-          <div className="my-5 grid w-full grid-cols-[2fr_3fr] gap-y-4 rounded-lg bg-[#ffc4de] px-6 py-5 font-medium text-primary-500">
-            <h2 className="font-bold">Nama Lembaga</h2>
-            <p>{instanceName}</p>
-            <h2 className="font-bold">Kategori Lembaga</h2>
-            <p>{instanceType}</p>
-            {selectedBooth && (
-              <>
-                <h2 className="font-bold">Nomor Booth</h2>
-                <p>{selectedBooth}</p>
-              </>
-            )}
+          <div className="my-5 flex w-full flex-col rounded-lg bg-[#ffc4de] px-6 py-5 font-medium text-primary-500">
+            <div className="grid w-full grid-cols-[2fr_3fr] gap-y-4">
+              <h2 className="font-bold">Nama Lembaga</h2>
+              <p>{instanceName}</p>
+              <h2 className="font-bold">Kategori Lembaga</h2>
+              <p>{instanceType}</p>
+              {selectedBooth && (
+                <>
+                  <h2 className="font-bold">Nomor Booth</h2>
+                  <p>{selectedBooth}</p>
+                </>
+              )}
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="ml-auto mt-3 rounded-md bg-primary-500 px-4 py-2 text-white"
+            >
+              Logout
+            </button>
           </div>
           <div className="my-5 w-full">
             <p className="text-primary">
@@ -152,13 +175,13 @@ const BookingForm = ({
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Pilih Lembaga" />
+                            <SelectValue placeholder="Pilih Booth" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {availableBooths.map((booth) => (
-                            <SelectItem key={booth} value={booth}>
-                              {booth}
+                            <SelectItem key={booth.id} value={booth.id}>
+                              {booth.code}
                             </SelectItem>
                           ))}
                         </SelectContent>
