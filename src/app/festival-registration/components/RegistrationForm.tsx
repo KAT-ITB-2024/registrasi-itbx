@@ -69,13 +69,13 @@ export const commitmentSchema = z.object({
     })
     .refine((file: FileList) => {
       return !file || file.length > 0;
-    }, "KTM harus diisi")
+    }, "MoU harus diisi")
     .refine((file: FileList) => {
       return file?.[0] && file[0].size <= MAX_UPLOAD_SIZE;
-    }, "KTM harus berukuran kurang dari 5MB")
+    }, "MoU harus berukuran kurang dari 5MB")
     .refine((file: FileList) => {
       return ACCEPTED_FILE_TYPES.includes(file?.[0]?.type ?? "");
-    }, "KTM harus berupa file PDF"),
+    }, "MoU harus berupa file PDF"),
 });
 
 export const paymentSchema = z.object({
@@ -96,7 +96,7 @@ export const paymentSchema = z.object({
     }, "Bukti Pembayaran harus berukuran kurang dari 5MB")
     .refine((file: FileList) => {
       return ACCEPTED_IMAGE_TYPES.includes(file?.[0]?.type ?? "");
-    }, "Bukti Pembayaran harus berupa file PDF"),
+    }, "Bukti Pembayaran harus berupa file JPG atau PNG"),
 });
 
 const RegistrationForm = () => {

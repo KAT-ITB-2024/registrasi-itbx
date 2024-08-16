@@ -38,10 +38,6 @@ const CommitmentForm = ({
       </h1>
       <div className="my-5 flex flex-col justify-center rounded-lg bg-[#ffc4de] p-5 text-primary-500">
         <p>
-          Sebelum mengirimkan form ini, harap untuk memahami TOR dan SOP yang
-          akan berlaku (TOR dan SOP dapat diakses pada linktree yang tertera)
-          <br />
-          <br />
           Lembaga yang akan berpartisipasi diharapkan membaca{" "}
           <Link
             target="_blank"

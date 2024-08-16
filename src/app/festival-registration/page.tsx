@@ -1,7 +1,9 @@
 import Image from "next/image";
 import RegistrationForm from "./components/RegistrationForm";
+import { redirect } from "next/navigation";
 
 const Page = () => {
+  redirect("/");
   return (
     <div className="relative flex h-screen w-full items-center justify-center bg-[url('/images/pink-festival-background.png')] bg-cover bg-center bg-no-repeat">
       <Image
