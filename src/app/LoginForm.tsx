@@ -119,7 +119,8 @@ export default function LoginForm() {
                   <Input
                     {...field}
                     id="password"
-                    placeholder="Masukkan Password"
+                    type="password"
+                    placeholder="Masukkan Password Berupa NIM"
                   />
                 </FormControl>
                 <FormMessage />

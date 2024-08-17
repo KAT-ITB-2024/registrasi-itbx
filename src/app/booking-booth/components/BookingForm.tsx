@@ -49,11 +49,15 @@ const BookingForm = ({
   instanceType: string;
   selectedBooth?: string;
 }) => {
+  const openDate = new Date("2024-08-17T20:00+07:00");
+  const closeDate = new Date("2024-08-17T22:00:00+07:00");
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const boothMutation = api.booth.registerLembagaBooth.useMutation();
+
+  const isAlreadyOpen = new Date() > openDate && new Date() < closeDate;
 
   const router = useRouter();
 
@@ -85,9 +89,10 @@ const BookingForm = ({
       toast.dismiss(toastId);
       setIsSuccessModalOpen(true);
     } catch (error) {
-      toast.error("Gagal mendaftar, silahkan coba lagi", {
+      toast.error("Booth sudah diambil, Mohon coba lagi", {
         id: toastId,
       });
+      router.refresh();
     } finally {
       setIsLoading(false);
       setIsAlertOpen(false);
@@ -137,7 +142,9 @@ const BookingForm = ({
             <p className="text-primary">
               Layout Booth (klik{" "}
               <Link
-                href={"google.com"}
+                href={
+                  "https://drive.google.com/drive/u/3/folders/1n6UUwTKhE_ELSIOlS_0AEBwz9uJ3Dq27"
+                }
                 target="_blank"
                 className="font-semibold underline"
               >
@@ -147,7 +154,7 @@ const BookingForm = ({
             </p>
             <div className="relative aspect-[16/9] w-full bg-blue-100">
               <Image
-                src="/images/booth_layout.png"
+                src="/images/layout.jpg"
                 alt="layout"
                 fill
                 objectFit="cover"
@@ -155,7 +162,15 @@ const BookingForm = ({
               />
             </div>
           </div>
-          {!selectedBooth && (
+          {!isAlreadyOpen && (
+            <div className="my-5 w-full">
+              <p className="text-primary font-semibold">
+                Pendaftaran Booth akan dibuka pada tanggal 17 Agustus 2024 pukul
+                20.00 WIB - 22.00 WIB
+              </p>
+            </div>
+          )}
+          {!selectedBooth && isAlreadyOpen && (
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleAlertOpen)}
